@@ -4,4 +4,6 @@ Required Libraries:
 - FastApi
 - Requests
 
-webhook url: https://secure-stud-properly.ngrok-free.app/webhook
+Uses ngrok
+
+Telegram webhook url: https://secure-stud-properly.ngrok-free.app/webhook
