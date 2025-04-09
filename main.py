@@ -2,16 +2,49 @@ from pydantic import BaseModel
 import json
 import requests
 from fastapi import FastAPI, Request
+from enum import Enum
+import os
+from dotenv import load_dotenv
 
-version = "Beta 1.0.0"
+version = "Beta 2.0.0"
 
 app = FastAPI()
 
-class attendance_submission(BaseModel):
+class ApiMethod(Enum):
+    GET = 1
+    POST = 2
+    UPDATE = 3
+    DELETE = 4
+
+
+class course(BaseModel):
     course_name: str
-   
+    course_display_name: str
+    poc: str
+    poc_contact: str
+
+def get_env_var(var):
+    load_dotenv()
+    envVar = os.getenv(var)
+    return envVar
+
+def supabase_api_call(path: str, method: ApiMethod):
+    key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" \
+    ".eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1dW5qdXBweXNscmhpZmJlY2lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3NTYzMDQsImV4cCI6MjA1OTMzMjMwNH0" \
+    ".VgKmGPPt5WegB4RD_-aaA-Zg_hGWSLytMdWuut0JtqQ"
+    url = "https://puunjuppyslrhifbecig.supabase.co/rest/v1"
+
+    response = ""
+
+    match (method):
+        case ApiMethod.GET:
+            response = requests.get(url+path, headers={"apikey": key})
+
+    return response
+
+
 def send_message(id, message):
-    token = "8022723908:AAESaQMh7pFdPICysbLKhYt5UETY1DB7HlM"
+    token = get_env_var("botToken")
     url = f'https://api.telegram.org/bot{token}/sendMessage'
     payload = {'chat_id': id, 'text': message}
     requests.post(url, payload)
