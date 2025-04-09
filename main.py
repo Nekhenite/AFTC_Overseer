@@ -29,16 +29,11 @@ def get_env_var(var):
     return envVar
 
 def supabase_api_call(path: str, method: ApiMethod):
-    key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" \
-    ".eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1dW5qdXBweXNscmhpZmJlY2lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3NTYzMDQsImV4cCI6MjA1OTMzMjMwNH0" \
-    ".VgKmGPPt5WegB4RD_-aaA-Zg_hGWSLytMdWuut0JtqQ"
-    url = "https://puunjuppyslrhifbecig.supabase.co/rest/v1"
-
     response = ""
 
     match (method):
         case ApiMethod.GET:
-            response = requests.get(url+path, headers={"apikey": key})
+            response = requests.get(get_env_var("url")+path, headers={"apikey": get_env_var("key")})
 
     return response
 
